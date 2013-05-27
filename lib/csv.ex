@@ -11,11 +11,11 @@ defmodule CSV do
 		{ word, line, list, state } = String.codepoints(s) |> Enum.reduce({ "", [], [], @normal_state }, fn c, { word, line, list, state } ->
 			case c do
 				"\n" ->
-					line = line ++ word
-					list = list ++ [line]
+					list = list ++ [List.flatten([line, word])]
+					word = ""
 					line = []
 				^separator when state == @normal_state ->
-					line = line ++ [word]
+					line = [line, word]
 					word = ""
 				^quote_char when state == @quoted_state ->
 					state = @normal_state
@@ -25,7 +25,7 @@ defmodule CSV do
 			end
 			{ word, line, list, state }
 		end)
-		line = line ++ [word]
+		line = List.flatten([line, word])
 		list = list ++ [line]
 		list
 	end
