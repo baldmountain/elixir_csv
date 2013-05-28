@@ -1,7 +1,5 @@
 # elixir_csv
 
-** TODO: Add more description **
-
 This is a very basic csv parser. It needs a lot more work to be a real CSV
 parser, but it is all I need.
 
@@ -18,3 +16,6 @@ CSV.parse_file(filename, separator // ",", quote_char // "\"", skip_lines // 0)
 
 reads the file named filename and then parses the contents of the file using
 parse.
+
+This code only handles UNIX or MS-DOS newlines. It will fail on old MacOS
+'\r' newlines.
