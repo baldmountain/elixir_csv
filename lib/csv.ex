@@ -47,7 +47,10 @@ defmodule CSV do
       state
     end)
     line = Enum.reverse([state.word | state.line])
-    list = [line | state.list]
+    list = case line do
+      [""] -> state.list
+      _ -> [line | state.list]
+    end
     Enum.reverse(list)
   end
 
