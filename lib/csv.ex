@@ -18,8 +18,8 @@ defmodule CSV do
 
   # def handle_char(c, state, skip_lines, quoted), do:
   def handle_char(c, state, 0, _), do: state.word(state.word <> c)
-  def handle_char(^quote_char, state, 0, @normal_state), do: state.quoted(@quoted_state)
-  def handle_char(^quote_char, state, 0, @quoted_state), do: state.quoted(@normal_state)
+  # def handle_char(^quote_char, state, 0, @normal_state), do: state.quoted(@quoted_state)
+  # def handle_char(^quote_char, state, 0, @quoted_state), do: state.quoted(@normal_state)
 
   @doc "Parse a bunch of CSV and return a list of lines parsed as csv"
   def parse(s, separator // ",", quote_char // "\"", skip_lines // 0) do
@@ -38,14 +38,14 @@ defmodule CSV do
         "\n" when skip_lines > 0 ->
           state.skip_lines(state.skip_lines - 1)
         "\r" ->
-          nil
+          state
         ^separator when current_state == @normal_state and skip_lines == 0 ->
           state = state.line([state.word | state.line])
           state.word("")
         ^quote_char when current_state == @quoted_state and skip_lines == 0 ->
-          handle_char(c, state, state.skip_lines, state.quoted)
+          state.quoted(@normal_state)
         ^quote_char when current_state != @quoted_state and skip_lines == 0 ->
-          handle_char(c, state, state.skip_lines, state.quoted)
+          state.quoted(@quoted_state)
         _  ->
           handle_char(c, state, state.skip_lines, state.quoted)
       end
