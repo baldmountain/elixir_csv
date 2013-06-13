@@ -3,7 +3,7 @@ defmodule Csv.Mixfile do
 
   def project do
     [ app: :elixir_csv,
-      version: "0.0.1",
+      version: "0.1.0",
       deps: deps ]
   end
 
