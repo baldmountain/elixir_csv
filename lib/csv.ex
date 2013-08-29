@@ -29,7 +29,7 @@ defmodule CSV do
     separator = state.separator
     quote_char = state.quote_char
     current_state = state.state
-    c = to_binary([c])
+    c = to_string([c])
     
     parse_inner(rest, case c do
       "\n" when skip_lines == 0 ->
