@@ -18,10 +18,10 @@ defmodule CSV do
     separator: ",",
     quote_char: "\"",
     skip_lines: 0
-    
+
   @doc false
   defp parse_inner(<<>>, state), do: state
-  
+
   @doc false
   defp parse_inner(<< c :: utf8, rest :: binary >>, state) do
     # define thes since we need then in guards
@@ -30,7 +30,7 @@ defmodule CSV do
     quote_char = state.quote_char
     current_state = state.state
     c = to_string([c])
-    
+
     parse_inner(rest, case c do
       "\n" when skip_lines == 0 ->
         state.list([Enum.reverse([state.word | state.line]) | state.list]).word("").line([])
@@ -50,7 +50,7 @@ defmodule CSV do
   end
 
   @doc "Parse a bunch of CSV and return a list of lines parsed as csv"
-  def parse(s, separator // ",", quote_char // "\"", skip_lines // 0) do
+  def parse(s, separator \\ ",", quote_char \\ "\"", skip_lines \\ 0) do
     # list and line are built reversed since it is mre effieince to append to
     # head. They are revered at the end
     state = parse_inner(s, State[separator: separator, quote_char: quote_char, skip_lines: skip_lines])
@@ -63,7 +63,7 @@ defmodule CSV do
   end
 
   @doc "Parse a file and return a list of lines parsed as CVS"
-  def parse_file(filename, separator // ",", quote_char // "\"", skip_lines // 0) do
+  def parse_file(filename, separator \\ ",", quote_char \\ "\"", skip_lines \\ 0) do
     { status, body } = File.read(filename)
     case status do
       :ok -> parse(body, separator, quote_char, skip_lines)
